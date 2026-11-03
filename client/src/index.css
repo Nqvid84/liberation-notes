@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    @apply bg-scene-sky-near;
+  }
+
+  body {
+    @apply font-body text-ui-text-primary bg-scene-sky-near overflow-hidden;
+  }
+}
+
+@keyframes drift-note {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(var(--dx, 6px), var(--dy, -8px), 0);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.09);
+  }
+}
+
+.note-float {
+  animation-name: drift-note;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.expanse-bloom {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  animation-name: breathe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+::selection {
+  background: rgba(198, 194, 220, 0.32);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note-float,
+  .expanse-bloom {
+    animation: none !important;
+  }
+}

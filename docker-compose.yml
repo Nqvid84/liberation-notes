@@ -1,0 +1,38 @@
+services:
+
+  # ---------------------------------------------------------------------------
+  # MongoDB
+  # Credentials come from server/.env via ${VAR} interpolation.
+  # No named volume — data is wiped on `docker compose down` (local dev only).
+  # ---------------------------------------------------------------------------
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASS}
+      MONGO_INITDB_DATABASE: liberation-notes
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Node server
+  # Built from server/Dockerfile with monorepo root as context.
+  # Uses server/.env.docker (mongo hostname, not localhost).
+  # Waits for mongo healthcheck to pass before starting.
+  # ---------------------------------------------------------------------------
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - "3001:3001"
+    env_file:
+      - server/.env.docker
+    depends_on:
+      mongo:
+        condition: service_healthy

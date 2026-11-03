@@ -1,0 +1,11 @@
+{
+  "name": "liberation-notes",
+  "private": true,
+  "description": "Liberation Notes — Monorepo root scripts",
+  "scripts": {
+    "up": "docker compose up -d --build",
+    "down": "docker compose down",
+    "logs": "docker compose logs -f server",
+    "restart": "docker compose up -d --build server"
+  }
+}

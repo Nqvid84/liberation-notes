@@ -1,0 +1,11 @@
+# Prevents large/sensitive directories from being sent to the Docker build context.
+# Add entries here if the build context (monorepo root) grows.
+
+**/node_modules
+**/.git
+**/.env
+**/.env.docker
+**/dist
+**/*.log
+client/
+docs/
